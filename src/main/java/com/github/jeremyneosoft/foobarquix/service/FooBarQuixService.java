@@ -1,26 +1,25 @@
-package com.github.jeremyneosoft.foobarquix;
+package com.github.jeremyneosoft.foobarquix.service;
 
 import java.util.stream.IntStream;
 import org.springframework.stereotype.Service;
 
+import com.github.jeremyneosoft.foobarquix.domain.ValidatedNumber;
+
 @Service
 public class FooBarQuixService {
 
-	public String transformToFooBarQuix(int number) {
-		if (number < 0 || number > 100) {
-			throw new IllegalArgumentException("Number must be between 0 and 100");
-		}
+	public String transformToFooBarQuix(ValidatedNumber validatedNumber) {
 
 		StringBuilder result = new StringBuilder();
 
-		if (number % 3 == 0) {
+		if (validatedNumber.getValue() % 3 == 0) {
 			result.append("FOO");
 		}
-		if (number % 5 == 0) {
+		if (validatedNumber.getValue() % 5 == 0) {
 			result.append("BAR");
 		}
 
-		String numberString = String.valueOf(number);
+		String numberString = String.valueOf(validatedNumber.getValue());
 		for (char c : numberString.toCharArray()) {
 			if (c == '3') {
 				result.append("FOO");
@@ -36,21 +35,18 @@ public class FooBarQuixService {
 		return result.isEmpty() ? numberString : result.toString();
 	}
 
-	public String transformToFooBarQuixAlternative(int number) {
-		if (number < 0 || number > 100) {
-			throw new IllegalArgumentException("Number must be between 0 and 100");
-		}
+	public String transformToFooBarQuixAlternative(ValidatedNumber validatedNumber) {
 
 		StringBuilder result = new StringBuilder();
 
-		if (number % 3 == 0) {
+		if (validatedNumber.getValue() % 3 == 0) {
 			result.append("FOO");
 		}
-		if (number % 5 == 0) {
+		if (validatedNumber.getValue() % 5 == 0) {
 			result.append("BAR");
 		}
 
-		String numberString = String.valueOf(number);
+		String numberString = String.valueOf(validatedNumber.getValue());
 
 		IntStream.range(0, numberString.length()).mapToObj(i -> numberString.charAt(i)).forEach(c -> {
 			if (c == '3') {
