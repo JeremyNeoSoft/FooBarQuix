@@ -3,7 +3,12 @@ package com.github.jeremyneosoft.foobarquix.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -15,36 +20,39 @@ public class FooBarQuixServiceTest {
 	@Autowired
 	private FooBarQuixService fooBarQuixService;
 
-	@Test
-	public void testFooBarQuix() {
-		assertEquals("1", fooBarQuixService.transformToFooBarQuix(new ValidatedNumber(1)));
-		assertEquals("FOOFOO", fooBarQuixService.transformToFooBarQuix(new ValidatedNumber(3)));
-		assertEquals("BARBAR", fooBarQuixService.transformToFooBarQuix(new ValidatedNumber(5)));
-		assertEquals("QUIX", fooBarQuixService.transformToFooBarQuix(new ValidatedNumber(7)));
-		assertEquals("FOO", fooBarQuixService.transformToFooBarQuix(new ValidatedNumber(9)));
-		assertEquals("FOOBARBAR", fooBarQuixService.transformToFooBarQuix(new ValidatedNumber(15)));
-		assertEquals("FOOFOOFOO", fooBarQuixService.transformToFooBarQuix(new ValidatedNumber(33)));
-		assertEquals("FOOBAR", fooBarQuixService.transformToFooBarQuix(new ValidatedNumber(51)));
-		assertEquals("BARFOO", fooBarQuixService.transformToFooBarQuix(new ValidatedNumber(53)));
+	private static final String FOO = "FOO";
+	private static final String BAR = "BAR";
+	private static final String QUIX = "QUIX";
+
+	private static Stream<Arguments> provideNumbersForFooBarQuixTransfo() {
+		return Stream.of(
+				Arguments.of(1, "1"),
+				Arguments.of(3, FOO + FOO),
+				Arguments.of(5, BAR + BAR),
+				Arguments.of(7, QUIX),
+				Arguments.of(9, FOO),
+				Arguments.of(15, FOO + BAR + BAR),
+				Arguments.of(33, FOO + FOO + FOO),
+				Arguments.of(51, FOO + BAR),
+				Arguments.of(53, BAR + FOO));
+	}
+
+	@ParameterizedTest
+	@MethodSource("provideNumbersForFooBarQuixTransfo")
+	public void testTransformToFooBarQuix(int input, String expected) {
+		assertEquals(expected, fooBarQuixService.transformToFooBarQuix(new ValidatedNumber(input)));
+	}
+
+	@ParameterizedTest
+	@MethodSource("provideNumbersForFooBarQuixTransfo")
+	public void testTransformToFooBarQuixAlternative(int input, String expected) {
+		assertEquals(expected, fooBarQuixService.transformToFooBarQuixAlternative(new ValidatedNumber(input)));
 	}
 
 	@Test
-	public void testFooBarQuixAlternative() {
-		assertEquals("1", fooBarQuixService.transformToFooBarQuixAlternative(new ValidatedNumber(1)));
-		assertEquals("FOOFOO", fooBarQuixService.transformToFooBarQuixAlternative(new ValidatedNumber(3)));
-		assertEquals("BARBAR", fooBarQuixService.transformToFooBarQuixAlternative(new ValidatedNumber(5)));
-		assertEquals("QUIX", fooBarQuixService.transformToFooBarQuixAlternative(new ValidatedNumber(7)));
-		assertEquals("FOO", fooBarQuixService.transformToFooBarQuixAlternative(new ValidatedNumber(9)));
-		assertEquals("FOOBARBAR", fooBarQuixService.transformToFooBarQuixAlternative(new ValidatedNumber(15)));
-		assertEquals("FOOFOOFOO", fooBarQuixService.transformToFooBarQuixAlternative(new ValidatedNumber(33)));
-		assertEquals("FOOBAR", fooBarQuixService.transformToFooBarQuixAlternative(new ValidatedNumber(51)));
-		assertEquals("BARFOO", fooBarQuixService.transformToFooBarQuixAlternative(new ValidatedNumber(53)));
+	public void testInvalidNumber() {
+		assertThrows(IllegalArgumentException.class, () -> new ValidatedNumber(-1));
+		assertThrows(IllegalArgumentException.class, () -> new ValidatedNumber(101));
 	}
-	
-	@Test
-    public void testInvalidNumber() {
-        assertThrows(IllegalArgumentException.class, () -> new ValidatedNumber(-1));
-        assertThrows(IllegalArgumentException.class, () -> new ValidatedNumber(101));
-    }
 
 }

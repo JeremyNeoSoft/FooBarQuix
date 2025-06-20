@@ -1,6 +1,5 @@
 package com.github.jeremyneosoft.foobarquix.service;
 
-import java.util.stream.IntStream;
 import org.springframework.stereotype.Service;
 
 import com.github.jeremyneosoft.foobarquix.domain.ValidatedNumber;
@@ -48,7 +47,7 @@ public class FooBarQuixService {
 
 		String numberString = String.valueOf(validatedNumber.getValue());
 
-		IntStream.range(0, numberString.length()).mapToObj(i -> numberString.charAt(i)).forEach(c -> {
+		numberString.chars().forEach(c -> {
 			if (c == '3') {
 				result.append("FOO");
 			}
