@@ -14,14 +14,16 @@ The project is built using Maven, Java, and Spring Boot.
 
 ## Algorithm Rules
 
-The algorithm follows these rules for transformation:
+The purpose of the algorithm is to transform a number into a string based on its divisibility by certain integers and the presence of specific digits within the number.
+The transformations are as follows:
 
-1. If the number is divisible by 3 or contains the digit 3, the output string will include "FOO".
-1. If the number is divisible by 5 or contains the digit 5, the output string will include "BAR".
-1. If the number contains the digit 7, the output string will include "QUIX".
-1. The "divisible by" rules take precedence over the "contains" rules.
-1. The content is analyzed from left to right.
-1. If none of the rules apply, the output will be the number itself as a string.
+1. If the number is divisible by 3, append "FOO" to the result.
+1. If the number is divisible by 5, append "BAR" to the result.
+
+And then, for each digit in the number, analyzed from left to right: 
+1. If the digit is '3', append "FOO" to the result.
+1. If the digit is '5', append "BAR" to the result.
+1. If the digit is '7', append "QUIX" to the result.
 
 ## Implementation
 
@@ -56,7 +58,7 @@ This endpoint allows users to process a batch of numbers from a specified input 
 Batch job has been launched
 ```
 
-### Endpoint: GET /foobarquix
+### Endpoint: GET `/foobarquix`
 
 This endpoint transforms a single integer number into a string based on the defined rules.
 
@@ -84,7 +86,7 @@ This endpoint transforms a single integer number into a string based on the defi
 }
 ```
 
-### Endpoint: GET /foobarquix-alt
+### Endpoint: GET `/foobarquix-alt`
 
 This endpoint transforms a single integer number into a string using the alternative implementation.
 
